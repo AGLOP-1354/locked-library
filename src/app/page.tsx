@@ -1,69 +1,81 @@
-import Image from "next/image";
+import { getLatestBook, getPublishedBooks, getUpcomingBooks } from "@/content/books";
+import {
+  GENRE_LABEL,
+  bookActions,
+  bookHref,
+  byline,
+  clothOf,
+  hasFreeText,
+  isBuyable,
+  isLightCloth,
+  spineSize,
+} from "@/lib/books";
+import { SiteFooter } from "@/components/SiteFooter";
+import { SiteHeader } from "@/components/SiteHeader";
+import type { SearchItem } from "@/components/SearchBox";
+import { BookShelf, type ShelfBook } from "./_components/BookShelf";
+import { Hero } from "./_components/Hero";
+import { RecentVideos } from "./_components/RecentVideos";
+import { SectionHeading } from "./_components/SectionHeading";
+import { UpcomingBooks } from "./_components/UpcomingBooks";
 
 export default function Home() {
+  const published = getPublishedBooks();
+  const anyBuyable = published.some(isBuyable);
+  const latest = getLatestBook();
+  const recent = published.filter((b) => b.youtubeVideoId && b.id !== latest?.id).slice(0, 3);
+
+  const shelf: ShelfBook[] = published.map((b) => {
+    const cloth = clothOf(b);
+    const { width, height } = spineSize(b);
+    return {
+      id: b.id,
+      title: b.title,
+      author: b.author,
+      byline: byline(b),
+      summary: b.summary,
+      genres: b.genres,
+      cloth,
+      light: isLightCloth(cloth),
+      width,
+      height,
+      bookHref: bookHref(b),
+      freeText: hasFreeText(b),
+      buyable: isBuyable(b),
+      actions: bookActions(b),
+    };
+  });
+
+  const searchItems: SearchItem[] = published.map((b) => ({
+    id: b.id,
+    title: b.title,
+    author: b.author,
+    freeText: hasFreeText(b),
+    buyable: isBuyable(b),
+    href: bookHref(b),
+  }));
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <>
+      <SiteHeader searchItems={searchItems} />
+      <main className="flex-1">
+        <Hero book={latest} />
+        <RecentVideos books={recent} />
+
+        <section id="books" aria-labelledby="books-title" className="scroll-mt-28 border-y border-line bg-ink-deep">
+          <div className="relative mx-auto max-w-7xl px-4 pb-10 pt-12 md:px-10 md:pb-18 md:pt-20">
+            <SectionHeading id="books-title" title="영상으로 만난 책">
+              {anyBuyable
+                ? "영상으로 보고, 영어 원문은 무료로 읽거나 한국어판으로 사서 읽을 수 있어요."
+                : "영상으로 보고, 영어 원문을 무료로 읽을 수 있어요."}
+            </SectionHeading>
+            <BookShelf books={shelf} genreLabels={GENRE_LABEL} />
+          </div>
+        </section>
+
+        <UpcomingBooks books={getUpcomingBooks()} />
       </main>
-    </div>
+      <SiteFooter />
+    </>
   );
 }

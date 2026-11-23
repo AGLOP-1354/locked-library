@@ -1,0 +1,9 @@
+// Cloudflare Pages 설정. 정적 export 결과(out/)를 그대로 올린다.
+// 배포: pnpm deploy:pages  (처음 한 번은 pnpm exec wrangler login 필요)
+// Pages 설정 파일은 account_id를 받지 않아서, 계정은 package.json의 deploy:pages에서 CLOUDFLARE_ACCOUNT_ID로 고정한다.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "lockedlibrary",
+  "pages_build_output_dir": "./out",
+  "compatibility_date": "2026-11-23"
+}

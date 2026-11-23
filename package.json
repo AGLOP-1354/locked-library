@@ -5,8 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "preview": "pnpm dlx serve out -l 4173",
+    "lint": "eslint",
+    "typecheck": "next typegen && tsc --noEmit",
+    "deploy:pages": "next build && CLOUDFLARE_ACCOUNT_ID=155e3e683d210decc550ff432a858491 wrangler pages deploy out --project-name lockedlibrary --branch main"
   },
   "dependencies": {
     "next": "16.4.6",
@@ -21,7 +23,8 @@
     "eslint": "^9",
     "eslint-config-next": "16.4.6",
     "tailwindcss": "4.3.3",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "4.166.0"
   },
   "packageManager": "pnpm@12.9.1"
 }
