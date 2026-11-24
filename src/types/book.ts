@@ -32,9 +32,10 @@ export type StoreLink = {
   url: string;
 };
 
-/** 제휴 출판사의 한국어판. 있으면 "한국어판 구매" 버튼이 생긴다. */
+/** 한국어판 구매 링크. 있으면 "한국어판 구매" 버튼이 생긴다. */
 export type KoreanEdition = {
-  publisher: string;
+  /** 어느 출판사 판인지 확인된 경우에만. 모르면 비워 둔다(지어내지 않는다). */
+  publisher?: string;
   /** 한국어판 책 제목이 채널 제목과 다를 때만 */
   title?: string;
   translator?: string;

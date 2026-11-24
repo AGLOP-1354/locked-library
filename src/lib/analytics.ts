@@ -17,7 +17,7 @@ export type EventMap = {
   /** 유튜브 영상/채널로 나가는 클릭 */
   youtube_click: { book_id?: string; placement: string };
   /** 한국어판 서점 링크 클릭 (수수료 전환의 핵심 지표) */
-  purchase_click: { book_id: string; store: string; publisher: string; placement: string };
+  purchase_click: { book_id: string; store: string; publisher?: string; placement: string };
   /** 무료 원문(외부 전자도서관) 링크 클릭 */
   read_start: { book_id: string; placement: string };
   /** 사이트 검색 (GA4 추천 이벤트 이름) */

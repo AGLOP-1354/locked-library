@@ -8,7 +8,7 @@ import { TrackedLink } from "@/components/TrackedLink";
 type Props = {
   bookId: string;
   title: string;
-  publisher: string;
+  publisher?: string;
   stores: StoreLink[];
   placement: string;
   /** 버튼(또는 링크) 자체의 모양 클래스 */

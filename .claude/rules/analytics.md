@@ -9,7 +9,7 @@
 - 핵심 전환: `purchase_click` (GA4에서 '주요 이벤트'로 표시). 그다음 `youtube_click`, `read_start`.
 - 구매/유튜브 링크에는 `placement`(예: `book_detail_hero`, `book_card`)를 꼭 넣어 위치별 성과를 비교한다.
 - 외부 구매 링크는 `target="_blank" rel="noopener sponsored"` (`BuyButton`/`TrackedLink sponsored`가 처리).
-- `purchase_click` 파라미터: `book_id`, `store`(서점), `publisher`(출판사), `placement`. 출판사·서점별 성과를 GA4 맞춤 측정기준으로 등록해 비교한다.
+- `purchase_click` 파라미터: `book_id`, `store`(서점), `publisher`(출판사, 모르면 없음), `placement`. 출판사·서점별 성과를 GA4 맞춤 측정기준으로 등록해 비교한다.
 - `book_view` 파라미터: `book_id`, `free_text`, `buyable`.
 - 현재 쓰는 placement: `header`, `footer`, `hero`, `hero_thumb`, `hero_empty`, `recent`, `shelf_detail`, `upcoming_subscribe`, `book_page`, `book_embed`, `book_chapter`, `book_origin`.
 - `read_start`는 외부 원문 링크 클릭이다 (사이트 안에 본문이 없음). `book_view`는 책 페이지 진입.

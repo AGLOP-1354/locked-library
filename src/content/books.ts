@@ -3,7 +3,8 @@ import type { Book } from "@/types/book";
 /**
  * 실제 책 데이터. 유튜브 채널(@lockedlibrary) 롱폼 영상과 설명란 기준.
  * 새 책은 /add-book 스킬로 추가한다. 공개일 내림차순 유지.
- * 한국어판 구매 링크는 koreanEdition에 넣는다 (예: { publisher: "○○출판", stores: [{ store: "예스24", url: "…" }] }).
+ * 한국어판 구매 링크는 koreanEdition에 넣는다 (예: { stores: [{ store: "쿠팡", url: "…" }] }).
+ * store 이름은 "쿠팡", "예스24"처럼 고정한다. 대가성 문구를 서점 이름으로 찾는다(src/lib/books.ts).
  */
 const ADAPTED_GYEONGSEONG = "1930년대 경성을 배경으로 인물을 바꿔 각색했어요.";
 
@@ -53,6 +54,7 @@ const books: Book[] = [
       { time: "5:03", title: "원작 이야기" },
     ],
     readLinks: [{ url: "https://www.gutenberg.org/ebooks/2148", language: "en" }],
+    koreanEdition: { stores: [{ store: "쿠팡", url: "https://link.coupang.com/a/iVy4ABWxJ6" }] },
     publishedAt: "2026-11-15",
   },
   {
@@ -81,6 +83,7 @@ const books: Book[] = [
       { url: "https://www.gutenberg.org/ebooks/5200", language: "en", translation: true },
       { url: "https://www.gutenberg.org/ebooks/22367", language: "de" },
     ],
+    koreanEdition: { stores: [{ store: "쿠팡", url: "https://link.coupang.com/a/iVzfgrY6cC" }] },
     publishedAt: "2026-11-10",
   },
   {
@@ -106,6 +109,7 @@ const books: Book[] = [
       { time: "8:06", title: "원작 이야기" },
     ],
     readLinks: [{ url: "https://www.gutenberg.org/ebooks/1952", language: "en" }],
+    koreanEdition: { stores: [{ store: "쿠팡", url: "https://link.coupang.com/a/iVziqIFQJ2" }] },
     publishedAt: "2026-11-09",
   },
 ];

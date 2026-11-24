@@ -172,7 +172,7 @@ export default async function BookPage({ params }: PageProps<"/books/[id]">) {
                   <dt className="text-paper-dim">한국어판</dt>
                   <dd className="leading-relaxed">
                     {edition.title ? <span className="font-serif">{edition.title}, </span> : null}
-                    {edition.publisher}
+                    {edition.publisher ?? `${edition.stores.map((s) => s.store).join(", ")}에서 살 수 있어요`}
                     {edition.translator ? <span className="text-paper-dim"> (옮긴이 {edition.translator})</span> : null}
                   </dd>
                 </>

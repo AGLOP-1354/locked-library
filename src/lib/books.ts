@@ -61,6 +61,22 @@ export const bookHref = (book: Pick<Book, "id">) => `/books/${book.id}/`;
 export const readLabel = (link: ReadLink) =>
   `${LANGUAGE_LABEL[link.language]} ${link.translation ? "번역본" : "원문"} 읽기`;
 
+/**
+ * 제휴 프로그램이 요구하는 대가성 문구. 서점 이름(StoreLink.store)으로 찾는다.
+ * 문구는 각 프로그램이 정한 그대로 쓴다 (바꾸지 않는다).
+ */
+const STORE_DISCLOSURE: Record<string, string> = {
+  쿠팡: "이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.",
+};
+
+/** 대가성 문구가 따로 정해지지 않은 서점에 쓰는 기본 문구 */
+export const DEFAULT_DISCLOSURE = "구매 링크로 책을 사면 잠긴 서재가 수수료를 받을 수 있어요.";
+
+/** 서점 목록에 필요한 대가성 문구들 (중복 제거) */
+export function storeDisclosures(stores: { store: string }[]): string[] {
+  return [...new Set(stores.map((s) => STORE_DISCLOSURE[s.store] ?? DEFAULT_DISCLOSURE))];
+}
+
 /** 무료로 읽을 원문 링크가 있는지 */
 export const hasFreeText = (book: Pick<Book, "readLinks">) => (book.readLinks?.length ?? 0) > 0;
 
@@ -75,7 +91,13 @@ export function bookActions(book: Book) {
     title: book.title,
     videoHref: youtubeUrl(book),
     read: read ? { url: read.url, label: readLabel(read) } : undefined,
-    edition: isBuyable(book) ? { publisher: book.koreanEdition!.publisher, stores: book.koreanEdition!.stores } : undefined,
+    edition: isBuyable(book)
+      ? {
+          publisher: book.koreanEdition!.publisher,
+          stores: book.koreanEdition!.stores,
+          disclosures: storeDisclosures(book.koreanEdition!.stores),
+        }
+      : undefined,
   };
 }
 export type BookActionsData = ReturnType<typeof bookActions>;

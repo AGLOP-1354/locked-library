@@ -16,7 +16,7 @@ type Props = { actions: BookActionsData; placement: string; className?: string }
  *   [ 영상 보기                     ]
  *   [ 영어 원문 읽기 ] [ 한국어판 구매 ]
  * 둘째 줄은 있는 것만. 하나뿐이면 한 줄을 다 쓴다.
- * 구매 버튼이 있으면 아래에 제휴 수수료 안내를 붙인다.
+ * 구매 버튼이 있으면 아래에 서점별 대가성 문구(쿠팡은 정해진 문장 그대로)를 붙인다.
  */
 export function BookActions({ actions, placement, className = "" }: Props) {
   const { bookId, title, videoHref, read, edition } = actions;
@@ -58,9 +58,12 @@ export function BookActions({ actions, placement, className = "" }: Props) {
         </div>
       ) : null}
       {edition ? (
-        <p className="text-xs leading-relaxed text-paper-dim">
-          한국어판은 {edition.publisher} 책이에요. 구매 링크로 사면 잠긴 서재가 수수료를 받을 수 있어요.
-        </p>
+        <div className="flex flex-col gap-1 text-xs leading-relaxed text-paper-dim">
+          {edition.publisher ? <p>한국어판은 {edition.publisher} 책이에요.</p> : null}
+          {edition.disclosures.map((d) => (
+            <p key={d}>{d}</p>
+          ))}
+        </div>
       ) : null}
     </div>
   );
