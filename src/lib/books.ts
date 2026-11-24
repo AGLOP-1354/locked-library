@@ -89,7 +89,10 @@ export function bookActions(book: Book) {
   return {
     bookId: book.id,
     title: book.title,
-    videoHref: youtubeUrl(book),
+    /** 사이트 안에서 재생할 영상이 있는지 */
+    hasVideo: Boolean(book.youtubeVideoId),
+    /** 책 페이지의 영상 위치 (다른 페이지에서 "영상 보기"를 누르면 여기로 온다) */
+    videoPageHref: `${bookHref(book)}#video`,
     read: read ? { url: read.url, label: readLabel(read) } : undefined,
     edition: isBuyable(book)
       ? {
@@ -101,6 +104,13 @@ export function bookActions(book: Book) {
   };
 }
 export type BookActionsData = ReturnType<typeof bookActions>;
+
+/** 한국어 조사: 받침이 있으면 withBatchim, 없으면 without. 예) josa("길먼", "이", "가") → "길먼이" */
+export function josa(word: string, withBatchim: string, without: string): string {
+  const code = word.charCodeAt(word.length - 1);
+  if (code < 0xac00 || code > 0xd7a3) return word + without;
+  return word + ((code - 0xac00) % 28 ? withBatchim : without);
+}
 
 /** "2026-11-28" → "11월 28일" */
 export function formatDate(ymd: string): string {

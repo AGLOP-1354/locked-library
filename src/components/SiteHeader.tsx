@@ -1,5 +1,6 @@
 import { site } from "@/lib/site";
-import { getUpcomingBooks } from "@/content/books";
+import { getPublishedBooks, getUpcomingBooks } from "@/content/books";
+import { isBuyable } from "@/lib/books";
 import { Icon } from "@/components/Icon";
 import { KeyholeLogo } from "@/components/KeyholeLogo";
 import { SearchBox, type SearchItem } from "@/components/SearchBox";
@@ -10,6 +11,7 @@ export function SiteHeader({ searchItems }: { searchItems: SearchItem[] }) {
   // 책이 없는 섹션은 메인에서 숨겨지므로 메뉴에서도 뺀다.
   const NAV = [
     { href: "/#books", label: "모든 책", show: true },
+    { href: "/#korean", label: "한국어판", show: getPublishedBooks().some(isBuyable) },
     { href: "/#upcoming", label: "공개 예정", show: getUpcomingBooks().length > 0 },
   ].filter((n) => n.show);
   return (

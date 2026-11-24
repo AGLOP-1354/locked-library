@@ -1,4 +1,5 @@
 import type { Book } from "@/types/book";
+import { isBuyable } from "@/lib/books";
 
 /**
  * 실제 책 데이터. 유튜브 채널(@lockedlibrary) 롱폼 영상과 설명란 기준.
@@ -135,7 +136,18 @@ export function getUpcomingBooks(): Book[] {
 }
 
 
-/** 영상이 있는 가장 최근 책 */
-export const getLatestBook = () => getPublishedBooks().find((b) => b.youtubeVideoId) ?? getPublishedBooks()[0];
+/**
+ * 한국어판 구매 링크가 있는 책을 앞으로 (수수료 전환 우선, 2026-11-24 결정).
+ * 각 묶음 안에서는 원래 순서(최신순)를 유지한다.
+ */
+export function buyableFirst(list: Book[]): Book[] {
+  return [...list.filter(isBuyable), ...list.filter((b) => !isBuyable(b))];
+}
+
+/** 홈·검색에 보여 줄 순서: 구매 가능한 책 먼저, 그다음 최신순 */
+export const getShowcaseBooks = () => buyableFirst(getPublishedBooks());
+
+/** 메인 맨 위에 둘 책: 영상이 있는 책 중 구매 가능한 가장 최근 책, 없으면 가장 최근 책 */
+export const getLatestBook = () => getShowcaseBooks().find((b) => b.youtubeVideoId) ?? getPublishedBooks()[0];
 
 export const getBook = (id: string) => books.find((b) => b.id === id);

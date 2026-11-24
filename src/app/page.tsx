@@ -1,4 +1,4 @@
-import { getLatestBook, getPublishedBooks, getUpcomingBooks } from "@/content/books";
+import { getLatestBook, getPublishedBooks, getShowcaseBooks, getUpcomingBooks } from "@/content/books";
 import {
   GENRE_LABEL,
   bookActions,
@@ -15,17 +15,20 @@ import { SiteHeader } from "@/components/SiteHeader";
 import type { SearchItem } from "@/components/SearchBox";
 import { BookShelf, type ShelfBook } from "./_components/BookShelf";
 import { Hero } from "./_components/Hero";
+import { KoreanEditionRow } from "./_components/KoreanEditionRow";
 import { RecentVideos } from "./_components/RecentVideos";
 import { SectionHeading } from "./_components/SectionHeading";
 import { UpcomingBooks } from "./_components/UpcomingBooks";
 
 export default function Home() {
   const published = getPublishedBooks();
+  // 구매 가능한 책(쿠팡 링크 있음)을 먼저 보여 준다. 각 묶음 안에서는 최신순.
+  const showcase = getShowcaseBooks();
   const anyBuyable = published.some(isBuyable);
   const latest = getLatestBook();
-  const recent = published.filter((b) => b.youtubeVideoId && b.id !== latest?.id).slice(0, 3);
+  const recent = showcase.filter((b) => b.youtubeVideoId && b.id !== latest?.id).slice(0, 3);
 
-  const shelf: ShelfBook[] = published.map((b) => {
+  const shelf: ShelfBook[] = showcase.map((b) => {
     const cloth = clothOf(b);
     const { width, height } = spineSize(b);
     return {
@@ -46,7 +49,7 @@ export default function Home() {
     };
   });
 
-  const searchItems: SearchItem[] = published.map((b) => ({
+  const searchItems: SearchItem[] = showcase.map((b) => ({
     id: b.id,
     title: b.title,
     author: b.author,
@@ -60,6 +63,7 @@ export default function Home() {
       <SiteHeader searchItems={searchItems} />
       <main className="flex-1">
         <Hero book={latest} />
+        <KoreanEditionRow books={published.filter(isBuyable)} />
         <RecentVideos books={recent} />
 
         <section id="books" aria-labelledby="books-title" className="scroll-mt-28 border-y border-line bg-ink-deep">

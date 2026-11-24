@@ -14,13 +14,24 @@ type Props = {
   /** 버튼(또는 링크) 자체의 모양 클래스 */
   buttonClassName: string;
   className?: string;
+  /** 서점 목록이 펼쳐지는 방향. 화면 아래에 붙은 버튼은 "above" */
+  menuPlacement?: "below" | "above";
 };
 
 /**
  * 한국어판 구매 버튼. 서점이 하나면 바로 이동, 여러 개면 서점 목록을 펼친다.
  * 모든 클릭은 purchase_click으로 기록된다. 제휴 링크라 rel="sponsored".
  */
-export function BuyButton({ bookId, title, publisher, stores, placement, buttonClassName, className = "" }: Props) {
+export function BuyButton({
+  bookId,
+  title,
+  publisher,
+  stores,
+  placement,
+  buttonClassName,
+  className = "",
+  menuPlacement = "below",
+}: Props) {
   const [open, setOpen] = useState(false);
   const menuId = useId();
   const wrap = useRef<HTMLDivElement>(null);
@@ -78,7 +89,7 @@ export function BuyButton({ bookId, title, publisher, stores, placement, buttonC
       {open ? (
         <ul
           id={menuId}
-          className="absolute inset-x-0 top-[calc(100%+6px)] z-10 min-w-48 overflow-hidden rounded-xl border border-line-strong bg-ink-raised shadow-[0_20px_40px_-12px_rgba(0,0,0,.8)]"
+          className={`absolute inset-x-0 z-10 min-w-48 ${menuPlacement === "above" ? "bottom-[calc(100%+6px)]" : "top-[calc(100%+6px)]"} overflow-hidden rounded-xl border border-line-strong bg-ink-raised shadow-[0_20px_40px_-12px_rgba(0,0,0,.8)]`}
         >
           {stores.map((s) => (
             <li key={s.store} className="border-b border-line last:border-0">

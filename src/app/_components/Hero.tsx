@@ -1,12 +1,12 @@
 import type { Book } from "@/types/book";
 import { site } from "@/lib/site";
-import { bookActions, bookHref, byline, formatDate, hasFreeText, isBuyable, youtubeUrl } from "@/lib/books";
+import { bookActions, bookHref, byline, formatDate, hasFreeText, isBuyable } from "@/lib/books";
 import { BookActions } from "@/components/BookActions";
 import { BookTags } from "@/components/BookTags";
 import { Icon } from "@/components/Icon";
 import { TrackedLink } from "@/components/TrackedLink";
 import { btn } from "@/components/buttonStyles";
-import { VideoThumb } from "./VideoThumb";
+import { VideoEmbed } from "@/components/VideoEmbed";
 
 /** 최신 영상의 책. 유튜브에서 넘어온 사람이 방금 본 책을 바로 찾게 한다. */
 export function Hero({ book }: { book: Book | undefined }) {
@@ -35,18 +35,10 @@ export function Hero({ book }: { book: Book | undefined }) {
       className="mx-auto flex max-w-7xl flex-col gap-5 px-4 pb-10 pt-5 md:flex-row md:flex-wrap md:items-center md:gap-14 md:px-10 md:pb-14 md:pt-18"
     >
       <figure className="m-0 md:order-2 md:min-w-0 md:flex-[1_1_560px]">
-        <TrackedLink
-          href={youtubeUrl(book)}
-          event={{ name: "youtube_click", params: { book_id: book.id, placement: "hero_thumb" } }}
-          aria-label={`${book.title} 영상 보기 (유튜브, 새 창)`}
-          className="group relative block md:shadow-[0_30px_80px_-30px_rgba(0,0,0,.8)]"
-        >
-          <VideoThumb book={book} />
-          <span className="absolute left-1/2 top-1/2 flex size-15 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-[1.5px] border-brass bg-ink/70 text-brass transition-transform duration-300 group-hover:scale-105 md:size-19">
-            <Icon name="play" size={22} />
-          </span>
-        </TrackedLink>
-        <figcaption className="mt-3 hidden text-[13px] text-paper-dim md:block">누르면 유튜브에서 재생돼요</figcaption>
+        {book.youtubeVideoId ? (
+          <VideoEmbed bookId={book.id} videoId={book.youtubeVideoId} title={book.videoTitle ?? book.title} placement="hero" />
+        ) : null}
+        <figcaption className="mt-3 hidden text-[13px] text-paper-dim md:block">이 페이지에서 바로 재생돼요</figcaption>
       </figure>
 
       <div className="flex min-w-0 flex-col gap-4.5 md:order-1 md:flex-[1_1_440px] md:gap-5">
@@ -62,7 +54,7 @@ export function Hero({ book }: { book: Book | undefined }) {
           <BookTags freeText={hasFreeText(book)} buyable={isBuyable(book)} className="self-center" />
         </div>
         <p className="max-w-[32em] font-serif text-[17px] leading-[1.8] text-paper-soft md:text-[19px]">{book.summary}</p>
-        <BookActions actions={bookActions(book)} placement="hero" className="pt-1" />
+        <BookActions actions={bookActions(book)} placement="hero" video="inline" className="pt-1" />
         <TrackedLink
           href={bookHref(book)}
           className="self-start py-2 text-[15px] text-brass underline decoration-brass-line underline-offset-4 hover:text-brass-hover"

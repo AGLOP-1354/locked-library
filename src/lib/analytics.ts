@@ -14,6 +14,8 @@ declare global {
 export type EventMap = {
   /** 책 페이지 진입 */
   book_view: { book_id: string; free_text: boolean; buyable: boolean };
+  /** 사이트 안 영상 재생 (유튜브로 나가지 않음). start는 챕터에서 시작한 초 */
+  video_play: { book_id: string; placement: string; start?: number };
   /** 유튜브 영상/채널로 나가는 클릭 */
   youtube_click: { book_id?: string; placement: string };
   /** 한국어판 서점 링크 클릭 (수수료 전환의 핵심 지표) */

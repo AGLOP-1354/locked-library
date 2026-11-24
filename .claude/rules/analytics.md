@@ -11,7 +11,8 @@
 - 외부 구매 링크는 `target="_blank" rel="noopener sponsored"` (`BuyButton`/`TrackedLink sponsored`가 처리).
 - `purchase_click` 파라미터: `book_id`, `store`(서점), `publisher`(출판사, 모르면 없음), `placement`. 출판사·서점별 성과를 GA4 맞춤 측정기준으로 등록해 비교한다.
 - `book_view` 파라미터: `book_id`, `free_text`, `buyable`.
-- 현재 쓰는 placement: `header`, `footer`, `hero`, `hero_thumb`, `hero_empty`, `recent`, `shelf_detail`, `upcoming_subscribe`, `book_page`, `book_embed`, `book_chapter`, `book_origin`.
+- 현재 쓰는 placement: `header`, `footer`, `hero`, `hero_empty`, `shelf_detail`, `upcoming_subscribe`, `book_page`, `book_chapter`, `book_origin`, 구매 위치 `edition_card`(구매 카드), `chapter_nudge`(원작 이야기 장 아래), `sticky_bar`(모바일 하단 바), `korean_row`(메인 한국어판 줄), `more_books`(책 페이지 아래 다른 책).
+- `video_play`: 사이트 안 영상 재생 (`book_id`, `placement`, 챕터에서 누르면 `start` 초). 유튜브로 나가는 `youtube_click`과 구분한다. 구매로 이어지는지 볼 때 `video_play` → `purchase_click` 순서를 본다.
 - `read_start`는 외부 원문 링크 클릭이다 (사이트 안에 본문이 없음). `book_view`는 책 페이지 진입.
 - 그 밖의 이벤트: `search`(검색어, 0.8초 멈추면 한 번), `shelf_select`(책장에서 책 선택).
 - 확인: 배포된 사이트에서 `performance.getEntriesByType("resource")` 중 `g/collect`의 `en=` 값, 또는 GA4 실시간/DebugView. 로컬 개발 서버에는 태그가 없다(`.env.production`만 씀).
